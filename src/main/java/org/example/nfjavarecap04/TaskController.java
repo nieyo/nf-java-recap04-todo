@@ -32,4 +32,10 @@ public class TaskController {
         return taskService.findById(id);
     }
 
+    @DeleteMapping("todo/{id}")
+    public void deleteById(@PathVariable String id) {
+        taskService.deleteById(id);
+    }
+
+
 }

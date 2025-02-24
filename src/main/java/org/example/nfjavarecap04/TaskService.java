@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -26,5 +27,14 @@ public class TaskService {
     public Task findById(String id) {
         return taskRepository.findById(id)
                 .orElseThrow();
+    }
+
+    public void deleteById(String id) {
+        if (taskRepository.existsById(id)) {
+            taskRepository.deleteById(id);
+        }
+        else {
+            throw new NoSuchElementException("Product with id: " + id + " not found!");
+        }
     }
 }

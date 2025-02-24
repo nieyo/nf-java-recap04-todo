@@ -103,4 +103,15 @@ class TaskControllerIntegrationTest {
                 """));
 
     }
+
+    @Test
+    @DirtiesContext
+    void deleteById() throws Exception {
+        String id = "123";
+        taskRepository.save(new Task(id, "Aufgabe", TaskStatus.OPEN));
+
+        mockMvc.perform(delete("/api/todo/{id}", id))
+                .andExpect(status().isOk());
+
+    }
 }

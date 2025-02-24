@@ -2,13 +2,9 @@ package org.example.nfjavarecap04;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class TaskServiceTest {
@@ -78,6 +74,27 @@ class TaskServiceTest {
 
         verify(mockTaskRepository).findById(id);
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void delete_whenTaskExists(){
+        String id = "147";
+        when(mockTaskRepository.existsById(id)).thenReturn(true);
+        doNothing().when(mockTaskRepository).deleteById(id);
+
+        taskService.deleteById(id);
+
+        verify(mockTaskRepository).existsById(id);
+        verify(mockTaskRepository).deleteById(id);
+    }
+
+    @Test
+    void delete_whenTaskNotExists(){
+        String id = "123";
+        when(mockTaskRepository.existsById(id)).thenReturn(false);
+
+        assertThrows(NoSuchElementException.class, () -> taskService.deleteById(id));
+        verify(mockTaskRepository).existsById(id);
     }
 
 }
