@@ -8,9 +8,9 @@ import java.util.List;
     /* REQUESTS FROM BROWSER DEV TOOLS
     METHOD      PATH                        PARAMETER
     GET:        /api/todo                   -
-    POST:       /api/todo                   {"description":"neue Aufgabe","status":"OPEN"}
+    POST:       /api/todo                   {"description":"Aufgabe","status":"OPEN"}
     GET:        /api/todo/{id}              -
-    PUT:        /api/todo/{id}              {"description":"Testing","status":"IN_PROGRESS"}
+    PUT:        /api/todo/{id}              {"id":"67bca3a4c1bcd22fea24d346","description":"Aufgabe","status":"IN_PROGRESS"}
 
     /api/todo/undefined = /api/todo/{id} --> Implement ID
     STATUS ENUM?
@@ -23,7 +23,6 @@ import java.util.List;
 public class TaskController {
 
     private final TaskService taskService;
-//    private final TaskMapper taskMapper;
 
     @PostMapping("todo")
     public Task saveTask(@RequestBody Task newTask) {
@@ -34,4 +33,10 @@ public class TaskController {
     public List<Task> findAll() {
         return taskService.findAll();
     }
+
+    @GetMapping("todo/{id}")
+    public Task findAll(@PathVariable String id) {
+        return taskService.findById(id);
+    }
+
 }

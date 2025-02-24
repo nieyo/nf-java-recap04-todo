@@ -18,4 +18,9 @@ public class TaskService {
     public List<Task> findAll() {
         return taskRepository.findAll();
     }
+
+    public Task findById(String id) {
+        return taskRepository.findById(id)
+                .orElseThrow();
+    }
 }

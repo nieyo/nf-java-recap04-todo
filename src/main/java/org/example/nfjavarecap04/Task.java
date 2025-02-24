@@ -7,9 +7,9 @@ import java.util.UUID;
 public record Task(
         @Id String id,
         String description,
-        String status
+        TaskStatus status
 ) {
     public Task(String description, String status) {
-        this(UUID.randomUUID().toString(), description, status);
+        this(UUID.randomUUID().toString(), description, TaskStatus.valueOf(status));
     }
 }

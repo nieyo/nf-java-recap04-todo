@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -43,6 +44,19 @@ class TaskServiceTest {
 
         verify(mockTaskRepository).findAll();
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void findById(){
+        String id = "123";
+        Task expected = new Task(id,"Neue Aufgabe", TaskStatus.OPEN);
+        when(mockTaskRepository.findById(id)).thenReturn(Optional.of(expected));
+
+        Task actual = taskService.findById(id);
+
+        verify(mockTaskRepository).findById(id);
+        assertEquals(expected, actual);
+
     }
 
 }

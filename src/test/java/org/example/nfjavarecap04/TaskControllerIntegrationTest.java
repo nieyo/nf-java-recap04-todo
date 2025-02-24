@@ -8,8 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -27,7 +26,7 @@ class TaskControllerIntegrationTest {
     void saveTask() throws Exception {
         String expected = """
         {
-            "description":"neue Aufgabe",
+            "description":"Aufgabe",
             "status":"OPEN"
         }
         """;
@@ -36,7 +35,9 @@ class TaskControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(expected))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expected));
+                .andExpect(content().json(expected))
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.id").isNotEmpty());
     }
 
     @Test
@@ -44,5 +45,22 @@ class TaskControllerIntegrationTest {
         mockMvc.perform(get("/api/todo"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void findById() throws Exception {
+        String id = "123";
+        taskRepository.save(new Task(id, "Aufgabe", TaskStatus.OPEN));
+
+        mockMvc.perform(get("/api/todo/{id}", id))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                {
+                    "id":"123",
+                    "description":"Aufgabe",
+                    "status":"OPEN"
+                }
+                """));
+
     }
 }
