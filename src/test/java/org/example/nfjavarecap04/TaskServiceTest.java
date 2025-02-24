@@ -19,16 +19,38 @@ class TaskServiceTest {
 
     // UNIT TESTS
     @Test
-    void saveTask(){
-        Task expected = new Task("Neue Aufgabe", "OPEN");
-        when(mockTaskRepository.save(expected)).thenReturn(expected);
+    void saveTask_whenNew(){
+        String generatedId = "123";
+        Task inputTask = new Task(null, "Aufgabe", TaskStatus.OPEN);
+        Task expectedTask = new Task(generatedId, "Aufgabe", TaskStatus.OPEN);
 
-        Task actual = taskService.save(expected);
+        when(mockTaskRepository.save(inputTask)).thenReturn(expectedTask);
 
-        verify(mockTaskRepository).save(expected);
-        assertEquals(expected.description(), actual.description());
-        assertEquals(expected.status(), actual.status());
+        Task actual = taskService.save(inputTask);
+
+        verify(mockTaskRepository).save(inputTask);
+        assertEquals(expectedTask.description(), actual.description());
+        assertEquals(expectedTask.status(), actual.status());
         assertNotNull(actual.id());
+        assertEquals(generatedId, actual.id());
+    }
+
+    @Test
+    void saveTask_whenUpdate(){
+        String existingId = "456";
+        Task existingTask = new Task(existingId, "Alte Aufgabe", TaskStatus.OPEN);
+        Task updatedTask = new Task(existingId, "Aktualisierte Aufgabe", TaskStatus.IN_PROGRESS);
+
+        when(mockTaskRepository.findById(existingId)).thenReturn(Optional.of(existingTask));
+        when(mockTaskRepository.save(updatedTask)).thenReturn(updatedTask);
+
+        Task actual = taskService.save(updatedTask);
+
+        verify(mockTaskRepository).findById(existingId);
+        verify(mockTaskRepository).save(updatedTask);
+        assertEquals(existingId, actual.id());
+        assertEquals(updatedTask.description(), actual.description());
+        assertEquals(updatedTask.status(), actual.status());
     }
 
     @Test
@@ -56,7 +78,6 @@ class TaskServiceTest {
 
         verify(mockTaskRepository).findById(id);
         assertEquals(expected, actual);
-
     }
 
 }

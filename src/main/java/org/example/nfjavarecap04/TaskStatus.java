@@ -2,5 +2,6 @@ package org.example.nfjavarecap04;
 
 public enum TaskStatus {
     OPEN,
-    IN_PROGRESS
+    IN_PROGRESS,
+    DONE
 }

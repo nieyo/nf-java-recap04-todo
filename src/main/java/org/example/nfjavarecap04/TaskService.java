@@ -12,7 +12,11 @@ public class TaskService {
     private final TaskRepository taskRepository;
 
     public Task save(Task newTask) {
-        return taskRepository.save(newTask);
+        if (newTask.id() == null || taskRepository.findById(newTask.id()).isPresent()) {
+            return taskRepository.save(newTask);
+        }
+
+        throw new IllegalArgumentException("Task with ID " + newTask.id() + " does not exists");
     }
 
     public List<Task> findAll() {

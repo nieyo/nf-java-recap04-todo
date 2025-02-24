@@ -5,18 +5,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-    /* REQUESTS FROM BROWSER DEV TOOLS
-    METHOD      PATH                        PARAMETER
-    GET:        /api/todo                   -
-    POST:       /api/todo                   {"description":"Aufgabe","status":"OPEN"}
-    GET:        /api/todo/{id}              -
-    PUT:        /api/todo/{id}              {"id":"67bca3a4c1bcd22fea24d346","description":"Aufgabe","status":"IN_PROGRESS"}
-
-    /api/todo/undefined = /api/todo/{id} --> Implement ID
-    STATUS ENUM?
-
-     */
-
 @RestController
 @RequestMapping("api")
 @RequiredArgsConstructor
@@ -26,6 +14,11 @@ public class TaskController {
 
     @PostMapping("todo")
     public Task saveTask(@RequestBody Task newTask) {
+        return taskService.save(newTask);
+    }
+
+    @PutMapping("todo/{id}")
+    public Task updateTask(@RequestBody Task newTask) {
         return taskService.save(newTask);
     }
 
