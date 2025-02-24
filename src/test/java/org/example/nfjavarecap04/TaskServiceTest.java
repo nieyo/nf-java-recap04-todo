@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 class TaskServiceTest {
@@ -24,7 +25,9 @@ class TaskServiceTest {
         Task actual = taskService.save(expected);
 
         verify(mockTaskRepository).save(expected);
-        assertEquals(expected, actual);
+        assertEquals(expected.description(), actual.description());
+        assertEquals(expected.status(), actual.status());
+        assertNotNull(actual.id());
     }
 
     @Test
